@@ -1,0 +1,29 @@
+.admin-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6); }
+@media (max-width: 760px) { .admin-stats-row { grid-template-columns: repeat(2, 1fr); } }
+.admin-stat-card { padding: var(--sp-4) var(--sp-5); display: flex; flex-direction: column; gap: 4px; }
+.admin-stat-card b { font-size: var(--fs-xl); font-family: var(--font-mono); }
+.admin-stat-card span { font-size: var(--fs-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.admin-tabs { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-4); border-bottom: 1px solid var(--border-subtle); }
+.admin-tabs button { padding: 10px 18px; background: none; border: none; color: var(--text-secondary); font-size: var(--fs-sm); border-bottom: 2px solid transparent; cursor: pointer; }
+.admin-tabs button.active { color: var(--text-primary); border-bottom-color: var(--signal-cyan); }
+
+.admin-tab-panel.hidden { display: none; }
+.admin-search-row { margin-bottom: var(--sp-4); max-width: 340px; }
+
+.admin-table-wrap { padding: 0; overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.admin-table th { text-align: left; padding: 12px 16px; color: var(--text-muted); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border-subtle); white-space: nowrap; }
+.admin-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover { background: var(--bg-hover); }
+.admin-user-cell { display: flex; align-items: center; gap: 10px; }
+.admin-uid { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+.admin-role-select { background: var(--bg-elevated); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-sm); padding: 5px 8px; font-size: var(--fs-xs); }
+.admin-rep-controls { display: flex; align-items: center; gap: 6px; }
+.admin-rep-controls button { width: 24px; height: 24px; border-radius: var(--radius-sm); background: var(--bg-elevated); border: 1px solid var(--border-subtle); color: var(--text-secondary); cursor: pointer; }
+.admin-status-banned { color: var(--signal-rose); font-size: var(--fs-xs); font-family: var(--font-mono); text-transform: uppercase; }
+.admin-status-active { color: var(--signal-green); font-size: var(--fs-xs); font-family: var(--font-mono); text-transform: uppercase; }
+.admin-action-btn { font-size: var(--fs-xs); padding: 5px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: var(--bg-elevated); color: var(--text-secondary); cursor: pointer; margin-right: 4px; }
+.admin-action-btn:hover { border-color: var(--signal-cyan); color: var(--text-primary); }
+.admin-action-btn.danger:hover { border-color: var(--signal-rose); color: var(--signal-rose); }

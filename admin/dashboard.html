@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — DevPort</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/icons/favicon.svg">
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand"><span class="dot"></span>Dev<span class="accent">Port</span> <span class="badge-role admin" style="margin-left:6px">Admin</span></a>
+    <div class="header-actions">
+      <a href="../forum.html" class="btn btn-ghost btn-sm">← На форум</a>
+      <a href="#" id="logout-btn" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main class="page-body">
+  <div class="container">
+
+    <div id="access-denied" class="hidden empty-state" style="margin-top:60px">
+      Доступ запрещён. Эта страница только для администраторов.
+    </div>
+
+    <div id="admin-loading" class="text-muted" style="padding:40px 0">Проверка доступа…</div>
+
+    <div id="admin-content" class="hidden">
+      <h1 style="font-size:var(--fs-xl); margin-bottom:var(--sp-2)">Панель администратора</h1>
+      <p class="text-muted" style="margin-bottom:var(--sp-5)">Управление пользователями, ролями, репутацией и темами форума.</p>
+
+      <div class="admin-stats-row">
+        <div class="card admin-stat-card"><b id="stat-total-users">0</b><span>Пользователей</span></div>
+        <div class="card admin-stat-card"><b id="stat-total-topics">0</b><span>Тем</span></div>
+        <div class="card admin-stat-card"><b id="stat-total-banned">0</b><span>Забанено</span></div>
+        <div class="card admin-stat-card"><b id="stat-total-staff">0</b><span>Модераторов/админов</span></div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="active" data-admin-tab="users">Пользователи</button>
+        <button data-admin-tab="topics">Темы</button>
+      </div>
+
+      <div id="admin-tab-users" class="admin-tab-panel">
+        <div class="admin-search-row">
+          <input class="form-input" id="user-search-input" placeholder="Поиск по имени или email...">
+        </div>
+        <div class="admin-table-wrap card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Пользователь</th><th>Email</th><th>ID</th><th>Роль</th><th>Репутация</th><th>Статус</th><th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="admin-tab-topics" class="admin-tab-panel hidden">
+        <div class="admin-table-wrap card">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Тема</th><th>Автор</th><th>Категория</th><th>Ответов</th><th>Статус</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="topics-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast-root"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../firebase/firebase-config.js"></script>
+<script src="../assets/js/utils.js"></script>
+<script src="../assets/js/firestore-service.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
