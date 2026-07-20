@@ -49,3 +49,18 @@
 .mobile-nav-panel.open { display: flex; }
 .mobile-nav-panel a { padding: 10px; border-radius: var(--radius-md); font-size: var(--fs-sm); }
 .mobile-nav-panel a:hover { background: var(--bg-hover); }
+@media (max-width:400px){
+
+#nav-profile-link{
+    order:1;
+}
+
+#nav-admin-link{
+    order:2;
+}
+
+#logout-btn{
+    order:3;
+}
+
+}
