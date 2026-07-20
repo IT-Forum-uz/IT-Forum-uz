@@ -1,0 +1,131 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    function userRole() {
+      // .get('role', 'user') falls back instead of throwing when the field is missing —
+      // a plain .data.role access errors out (and denies the WHOLE rule) for any user
+      // document that was created without that field.
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'user');
+    }
+    function isStaff() {
+      return isSignedIn() && userRole() in ['moderator', 'admin', 'super_admin'];
+    }
+    function isAdmin() {
+      return isSignedIn() && userRole() in ['admin', 'super_admin'];
+    }
+    function isValidString(field, maxLen) {
+      return field is string && field.size() > 0 && field.size() <= maxLen;
+    }
+    function isBanned() {
+      // Same fix: .data.get('banned', false) instead of .data.banned. Every user doc
+      // created by auth.js has no `banned` key at all, so the old version threw an
+      // evaluation error on every create/update that checked !isBanned() — this is why
+      // creating topics, posting replies, and sending messages were all failing while
+      // bookmarks (which never calls isBanned()) worked fine.
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('banned', false) == true;
+    }
+
+    /* ---------------- USERS ---------------- */
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isOwner(userId)
+                    && isValidString(request.resource.data.displayName, 40)
+                    && request.resource.data.role == 'user';
+      allow update: if isAdmin()
+                    || (isOwner(userId) && request.resource.data.role == resource.data.role)
+                    || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['followers']));
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    /* ---------------- CATEGORIES ---------------- */
+    match /categories/{catId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if isAdmin()
+                    || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['topicsCount', 'postsCount']));
+      allow delete: if isAdmin();
+    }
+
+    /* ---------------- TOPICS ---------------- */
+    match /topics/{topicId} {
+      allow read: if true;
+      allow create: if isSignedIn() && !isBanned()
+                    && isValidString(request.resource.data.title, 200)
+                    && request.resource.data.authorId == request.auth.uid;
+      allow update: if isSignedIn() && (
+                      resource.data.authorId == request.auth.uid || isStaff()
+                    ) || (
+                      // Any signed-in, non-banned user replying can bump reply stats on someone else's topic.
+                      isSignedIn() && !isBanned()
+                      && request.resource.data.diff(resource.data).affectedKeys()
+                           .hasOnly(['repliesCount', 'lastReplyAt', 'lastReplyBy', 'updatedAt'])
+                    ) || (
+                      // Anyone (including guests) can bump the view counter.
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['viewsCount'])
+                    );
+      allow delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isStaff());
+
+      match /posts/{postId} {
+        allow read: if true;
+        allow create: if isSignedIn() && !isBanned()
+                      && isValidString(request.resource.data.content, 20000)
+                      && request.resource.data.authorId == request.auth.uid;
+        allow update: if isSignedIn() && (
+                        resource.data.authorId == request.auth.uid
+                        || isStaff()
+                        // allow any signed-in user to toggle their own reaction arrays only
+                        || request.resource.data.diff(resource.data).affectedKeys()
+                             .hasOnly(['reactions'])
+                      );
+        allow delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isStaff());
+      }
+    }
+
+    /* ---------------- BOOKMARKS ---------------- */
+    match /bookmarks/{bookmarkId} {
+      allow read, write: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    /* ---------------- NOTIFICATIONS ---------------- */
+    match /notifications/{notifId} {
+      allow read, update, delete: if isSignedIn() && resource.data.recipientId == request.auth.uid;
+      allow create: if isSignedIn();
+    }
+
+    /* ---------------- CONVERSATIONS / MESSAGES ---------------- */
+    match /conversations/{convId} {
+      allow get: if isSignedIn() && (resource == null || request.auth.uid in resource.data.participants);
+      allow list: if isSignedIn() && request.auth.uid in resource.data.participants;
+      allow create: if isSignedIn() && request.auth.uid in request.resource.data.participants;
+      allow update: if isSignedIn() && request.auth.uid in resource.data.participants;
+
+      match /messages/{msgId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn() && !isBanned();
+        allow update, delete: if isSignedIn() && resource.data.senderId == request.auth.uid;
+      }
+    }
+
+    /* ---------------- REPORTS ---------------- */
+    match /reports/{reportId} {
+      allow create: if isSignedIn();
+      allow read, update, delete: if isStaff();
+    }
+
+    /* ---------------- ADMIN LOGS ---------------- */
+    match /logs/{logId} {
+      allow read: if isStaff();
+      allow create: if isStaff();
+      allow update, delete: if false;
+    }
+  }
+}
