@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /messages.html
+Disallow: /notifications.html
+Disallow: /settings.html
+
+Sitemap: https://it-forum-uz.github.io/IT-Forum-uz/sitemap.xml
