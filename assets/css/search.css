@@ -1,0 +1,27 @@
+.search-hero { margin-bottom: var(--sp-6); }
+.search-hero .hero-eyebrow { color: var(--signal-cyan); font-size: var(--fs-sm); margin-bottom: var(--sp-3); }
+.search-hero .terminal-cursor { animation: pulse 1s steps(2) infinite; }
+.search-box { position: relative; max-width: 640px; }
+.search-box svg { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--text-muted); }
+.search-box input {
+  width: 100%; background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full); padding: 14px 20px 14px 48px; color: var(--text-primary); font-size: var(--fs-md);
+}
+.search-box input:focus { outline: none; border-color: var(--signal-cyan); box-shadow: 0 0 0 3px rgba(79,214,196,0.12); }
+
+.search-tabs { display: flex; gap: var(--sp-2); margin: var(--sp-5) 0 var(--sp-4); border-bottom: 1px solid var(--border-subtle); }
+.search-tabs button {
+  background: none; border: none; padding: 10px 4px; margin-right: var(--sp-5); color: var(--text-muted);
+  font-size: var(--fs-sm); font-weight: 600; border-bottom: 2px solid transparent; transition: color var(--dur-fast), border-color var(--dur-fast);
+}
+.search-tabs button.active { color: var(--text-primary); border-bottom-color: var(--signal-cyan); }
+.search-tabs button .count { font-family: var(--font-mono); color: var(--text-muted); margin-left: 4px; }
+
+.search-user-row { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-4); border-bottom: 1px solid var(--border-subtle); }
+.search-user-row:last-child { border-bottom: none; }
+.search-user-row .info { flex: 1; min-width: 0; }
+.search-user-row .info h4 { font-size: var(--fs-sm); margin: 0 0 2px; }
+.search-user-row .info p { margin: 0; font-size: var(--fs-xs); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.search-prompt { text-align: center; padding: var(--sp-9) var(--sp-4); color: var(--text-muted); }
+.search-prompt .mono { color: var(--signal-cyan); font-size: var(--fs-sm); }

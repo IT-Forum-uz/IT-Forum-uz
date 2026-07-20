@@ -1,0 +1,6 @@
+.topic-head { margin-bottom: var(--sp-5); }
+.topic-head-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-4); flex-wrap: wrap; }
+.topic-head h1 { font-size: var(--fs-xl); }
+.topic-tags { display: flex; gap: 6px; margin-top: var(--sp-2); flex-wrap: wrap; }
+.topic-toolbar { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.reply-box { margin-top: var(--sp-6); }

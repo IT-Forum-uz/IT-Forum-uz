@@ -1,0 +1,110 @@
+/* ==========================================================================
+   DevPort — Design Tokens
+   Direction: a developer's terminal & version-control world, not a generic
+   dark dashboard. Status dots read like process/online signals, cards read
+   like file listings, thread replies read like a commit graph.
+   ========================================================================== */
+
+:root {
+  /* ---- Color: base surfaces ---- */
+  --bg-void: #0b0e14;      /* page background, like an editor canvas */
+  --bg-surface: #10141d;   /* cards, panels */
+  --bg-elevated: #171d29;  /* raised elements, modals, popovers */
+  --bg-hover: #1d2432;     /* hover state fill */
+  --border-subtle: #1f2632;
+  --border-strong: #2c3646;
+
+  /* ---- Color: text ---- */
+  --text-primary: #e7ebf3;
+  --text-secondary: #aab3c5;
+  --text-muted: #6b7484;
+  --text-disabled: #4a5364;
+
+  /* ---- Color: signal accents ---- */
+  --signal-cyan: #4fd6c4;      /* "online" / active process */
+  --signal-cyan-dim: #2a5a54;
+  --signal-amber: #f0a742;     /* reputation, warnings, badges */
+  --signal-amber-dim: #5c471f;
+  --signal-violet: #9d8cff;    /* mentions, links, highlights */
+  --signal-rose: #f2607a;      /* dislike / destructive */
+  --signal-green: #5fd97e;     /* success / open */
+
+  /* ---- Gradients ---- */
+  --gradient-hero: linear-gradient(135deg, #101826 0%, #0b0e14 55%, #0d1a1c 100%);
+  --gradient-accent: linear-gradient(120deg, var(--signal-cyan) 0%, var(--signal-violet) 100%);
+  --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+
+  /* ---- Glassmorphism ---- */
+  --glass-bg: rgba(23, 29, 41, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-blur: 18px;
+
+  /* ---- Typography ---- */
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.875rem;
+  --fs-2xl: 2.5rem;
+  --fs-3xl: 3.25rem;
+
+  /* ---- Spacing scale ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* ---- Radius ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,0.45);
+  --shadow-glow-cyan: 0 0 0 1px rgba(79,214,196,0.25), 0 0 24px rgba(79,214,196,0.12);
+  --shadow-glow-violet: 0 0 0 1px rgba(157,140,255,0.25), 0 0 24px rgba(157,140,255,0.12);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+
+  /* ---- Layout ---- */
+  --container-max: 1240px;
+  --header-h: 68px;
+}
+
+/* Light theme override (toggle via [data-theme="light"] on <html>) */
+:root[data-theme="light"] {
+  --bg-void: #f4f6f9;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: #eef1f6;
+  --border-subtle: #e3e7ee;
+  --border-strong: #cdd4e0;
+
+  --text-primary: #131722;
+  --text-secondary: #4b5563;
+  --text-muted: #8a93a3;
+  --text-disabled: #b6bccb;
+
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(15, 23, 42, 0.08);
+
+  --gradient-hero: linear-gradient(135deg, #eef2f7 0%, #f4f6f9 55%, #e7f4f2 100%);
+  --gradient-card: linear-gradient(180deg, rgba(15,23,42,0.03) 0%, rgba(15,23,42,0) 100%);
+}

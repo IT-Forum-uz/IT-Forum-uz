@@ -1,0 +1,29 @@
+.forum-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--sp-5); flex-wrap: wrap; gap: var(--sp-4); }
+.filter-chip { padding: 7px 16px; border-radius: var(--radius-full); background: var(--bg-elevated); border: 1px solid var(--border-subtle); font-size: var(--fs-sm); color: var(--text-secondary); transition: all var(--dur-fast); }
+.filter-chip:hover { border-color: var(--signal-cyan); }
+.filter-chip.active { background: var(--gradient-accent); color: #06120f; border-color: transparent; }
+
+.members-toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+.members-search { flex: 1 1 260px; position: relative; }
+.members-search input {
+  width: 100%; background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full); padding: 10px 16px 10px 38px; color: var(--text-primary); font-size: var(--fs-sm);
+}
+.members-search svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-muted); }
+.members-sort { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.members-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--sp-4);
+}
+.member-card { position: relative; }
+.member-card .status-dot { position: absolute; top: 16px; right: 16px; }
+.member-card .avatar { margin: 0 auto var(--sp-3); }
+.member-card .bio-snippet { font-size: var(--fs-xs); color: var(--text-muted); margin: 6px 0 var(--sp-3); min-height: 32px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.member-card .member-stats { display: flex; justify-content: center; gap: var(--sp-4); font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: var(--sp-3); margin-top: var(--sp-2); }
+.member-card .member-stats b { display: block; color: var(--text-primary); font-size: var(--fs-sm); }
+.member-card .member-skills { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-bottom: var(--sp-3); }
+
+.members-load-more { display: flex; justify-content: center; margin-top: var(--sp-6); }
