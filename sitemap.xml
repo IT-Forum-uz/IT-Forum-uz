@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://it-forum-uz.github.io/IT-Forum-uz/index.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://it-forum-uz.github.io/IT-Forum-uz/forum.html</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://it-forum-uz.github.io/IT-Forum-uz/members.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://it-forum-uz.github.io/IT-Forum-uz/search.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://it-forum-uz.github.io/IT-Forum-uz/login.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://it-forum-uz.github.io/IT-Forum-uz/register.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!--
+    Темы (topic.html?id=...) и профили (profile.html?uid=...) сюда НЕ включены —
+    это динамические страницы, ID которых существуют только в Firestore, а не
+    в файловой структуре сайта. Чтобы включить их в sitemap, нужен отдельный
+    скрипт, который при каждом деплое читает коллекцию topics/users и
+    генерирует дополнительные <url> записи. Подробности — в SEO-README.md.
+  -->
+
+</urlset>
