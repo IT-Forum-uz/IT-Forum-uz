@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход — DevPort</title>
+<link rel="icon" href="assets/icons/favicon.svg">
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-side">
+    <div class="auth-side-inner">
+      <div class="auth-quote">$ devport login --user</div>
+      <h2>С возвращением в систему.</h2>
+      <p>Продолжайте обсуждения, отвечайте на вопросы и следите за репутацией.</p>
+      <div class="auth-feature-list">
+        <div><span class="check">✓</span> Markdown-редактор с подсветкой кода</div>
+        <div><span class="check">✓</span> Личные сообщения и уведомления в реальном времени</div>
+        <div><span class="check">✓</span> Репутация, значки и рейтинг участников</div>
+      </div>
+    </div>
+  </div>
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+      <a href="index.html" class="brand flex"><span class="dot"></span>Dev<span class="accent">Port</span></a>
+      <h1>Вход в аккаунт</h1>
+      <p class="sub">Рады видеть вас снова</p>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email</label>
+          <input class="form-input" type="email" id="login-email" required autocomplete="email">
+          <div class="form-error" id="login-email-error"></div>
+        </div>
+        <div class="form-group">
+          <div class="password-row"><label class="form-label" for="login-password">Пароль</label>
+            <a href="#" id="forgot-password-link" class="text-cyan" style="font-size:var(--fs-xs)">Забыли пароль?</a>
+          </div>
+          <input class="form-input" type="password" id="login-password" required autocomplete="current-password">
+          <div class="form-error" id="login-password-error"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="login-submit">Войти</button>
+      </form>
+      <div class="auth-switch">Нет аккаунта? <a href="register.html" class="text-cyan">Зарегистрироваться</a></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-root"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase/firebase-config.js"></script>
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/auth.js"></script>
+</body>
+</html>

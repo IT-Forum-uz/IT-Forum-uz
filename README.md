@@ -1,16 +1,160 @@
-## Hi there 👋
+# DevPort — форум для разработчиков (ядро проекта)
 
-<!--
-**IT-Forum-uz/IT-Forum-uz** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Рабочий каркас форума на чистом HTML/CSS/JS + Firebase. Никаких сборщиков —
+открывается напрямую или через любой статический сервер.
 
-Here are some ideas to get you started:
+## Что уже полностью работает
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- Регистрация / вход / сброс пароля (Firebase Auth)
+- 29 категорий (создаются автоматически при первом запуске)
+- Создание тем с Markdown-редактором (жирный, курсив, код, цитата, спойлер,
+  таблицы, списки, drag-and-drop загрузка изображений в Firebase Storage)
+- Лента тем: сортировка (активные/новые/популярные/обсуждаемые), пагинация,
+  фильтр по категории
+- Просмотр темы: ответы в реальном времени (Firestore onSnapshot), 7 типов
+  реакций, цитирование, редактирование и удаление своих сообщений,
+  закрепление/закрытие/удаление темы модераторами
+- Профиль: аватар и обложка (загрузка в Storage), био, навыки, GitHub/
+  Telegram/сайт, статистика, подписка на пользователя, закладки
+- Тёмная/светлая тема, glassmorphism, адаптивная вёрстка
+- Firestore и Storage security rules с проверкой ролей и владения
+
+## Быстрый старт
+
+1. Создайте проект на https://console.firebase.google.com
+2. Authentication → Sign-in method → включите Email/Password
+3. Firestore Database → создайте базу (production mode)
+4. Storage → создайте бакет
+5. Project settings → General → скопируйте конфиг веб-приложения в
+   `firebase/firebase-config.js`
+6. Установите Firebase CLI и задеплойте правила:
+   ```
+   npm install -g firebase-tools
+   firebase login
+   firebase init firestore storage   # выберите существующий проект
+   firebase deploy --only firestore:rules,storage:rules
+   ```
+7. Откройте `index.html` через любой статический сервер, например:
+   ```
+   npx serve .
+   ```
+   (Открытие через `file://` тоже работает для большинства функций,
+   но для Storage/загрузки файлов рекомендуется локальный сервер.)
+
+## Структура
+
+```
+itforum/
+├── index.html            Главная
+├── login.html            Вход
+├── register.html         Регистрация
+├── forum.html            Список тем / категории
+├── topic.html            Тема + ответы
+├── create-topic.html     Создание темы
+├── profile.html          Профиль пользователя
+├── manifest.json
+├── firebase/
+│   ├── firebase-config.js
+│   ├── firestore.rules
+│   └── storage.rules
+└── assets/
+    ├── css/              variables, base, components, home, auth, forum, topic, profile
+    ├── js/               utils, nav, auth, firestore-service, editor, home, forum, topic,
+    │                     create-topic, profile
+    ├── images/           default-avatar.svg
+    └── icons/            favicon.svg
+```
+
+## Модель данных Firestore
+
+- `users/{uid}` — displayName, photoURL, coverURL, bio, skills[], website,
+  github, telegram, discord, role, topicsCount, postsCount, reputation,
+  followers[], createdAt, lastSeen
+- `categories/{id}` — name, slug, icon, topicsCount, postsCount
+- `topics/{id}` — title, categoryId, tags[], authorId, viewsCount,
+  repliesCount, isPinned, isClosed, lastReplyAt
+- `topics/{id}/posts/{id}` — content (markdown), authorId, reactions{7 типов},
+  quotedPostId
+- `bookmarks/{uid_topicId}`, `notifications/{id}`, `conversations/{id}/messages/{id}`,
+  `reports/{id}` — схемы уже описаны в `firestore.rules`, готовы для
+  следующих экранов
+
+## Новое в этой сборке
+
+3. **Поиск** (search.html) — единая страница с вкладками "Темы" / "Участники",
+   живой поиск с debounce, синхронизация с `?q=` в URL.
+   `searchTopics` теперь матчит по всем словам запроса (`array-contains-any`)
+   и ранжирует по числу совпавших токенов; `searchUsers` ищет по новому полю
+   `displayNameLower` (регистронезависимо).
+4. **Список участников** (members.html) — сетка карточек с онлайн-статусом,
+   сортировкой (репутация / новые / активность / алфавит) и подгрузкой
+   постранично; переключается в режим поиска по имени.
+5. **Настройки аккаунта** (settings.html) — вкладки "Профиль" (аватар, био,
+   навыки, соцсети), "Аккаунт" (смена email с подтверждением, смена пароля
+   через reauthenticate), "Уведомления" (переключатели, пишут в
+   `users/{uid}.notificationPrefs`), "Оформление" (тема, синхронизирована с
+   тем же переключателем в шапке) и "Приватность и данные" (выход, удаление
+   аккаунта с подтверждением паролем).
+   Ссылка на настройки (⚙️) добавлена в шапку на всех страницах.
+
+`displayNameLower` бэкфилится автоматически: при каждом входе `nav.js`
+проверяет, есть ли это поле у текущего пользователя, и создаёт его при
+необходимости — старые аккаунты донастраивать вручную не нужно.
+`firestore.rules` обновлены: пользователь теперь может удалить свой
+собственный документ (`users/{uid}`) — необходимо для кнопки "Удалить
+аккаунт"; **не забудьте передеплоить правила** (`firebase deploy --only
+firestore:rules`), если проект уже был развёрнут раньше.
+
+## Новое: сообщения, уведомления, админ-панель
+
+- **notifications.html** — лента уведомлений (ответы, реакции, цитаты,
+  подписки) в реальном времени, с отметкой "прочитано" по клику, кнопкой
+  "Прочитать всё" и удалением отдельных уведомлений.
+- **messages.html** — личные диалоги между пользователями в реальном
+  времени (Firestore `onSnapshot`), список диалогов слева, чат справа.
+  Кнопка **"✉ Написать"** появилась на `profile.html` рядом с кнопкой
+  подписки — открывает (или создаёт) диалог с этим пользователем.
+- **Роли и теги**: `admin` (красный), `moderator` (жёлтый/amber), `vip`
+  (зелёный), `newbie` (серый) — цвета в `assets/css/base.css`
+  (`.badge-role.*`).
+- **admin/dashboard.html** — скрытая админ-панель:
+  - Ссылка в шапке (`#nav-admin-link`) видна только аккаунтам с ролью
+    `admin` или `super_admin` — не модераторам, не обычным пользователям.
+  - Сама страница дополнительно проверяет роль при загрузке
+    (`admin/admin.js`) и показывает "Доступ запрещён" всем остальным,
+    даже если кто-то откроет ссылку напрямую.
+  - Firestore-правила (`firestore.rules`, `isAdmin()`) — настоящая
+    граница безопасности; проверки в браузере — только для UX.
+  - Возможности: список всех пользователей (никнейм, email, ID,
+    репутация, роль, статус), назначение роли/тега, изменение
+    репутации, бан/разбан аккаунта, список тем с закреплением/
+    закрытием/удалением.
+  - Пароли пользователей нигде не хранятся и не отображаются. Firebase
+    Authentication хранит пароли захэшированными и не даёт API для их
+    чтения — показать их администратору невозможно в принципе, это не
+    ограничение данной реализации.
+
+### Как получить первый admin-аккаунт
+
+Так как `firestore.rules` разрешает менять `role` только тому, у кого
+уже есть роль `admin`/`super_admin`, первого администратора нужно
+назначить вручную один раз:
+
+1. Зарегистрируйтесь на сайте как обычный пользователь.
+2. Firebase Console → Firestore Database → `users` → найдите свой
+   документ (по полю `email`).
+3. Отредактируйте поле `role`, поставьте `super_admin`.
+4. Перезайдите на сайте — в шапке появится значок админ-панели.
+
+Дальше новых модераторов/админов можно назначать прямо из
+`admin/dashboard.html`.
+
+## Дальше по плану (ещё не реализовано в этой сборке)
+
+1. **Жалобы (reports)** — UI для отправки и разбора жалоб (коллекция и
+   правила уже готовы в `firestore.rules`)
+2. **PWA offline** — service worker, push-уведомления
+3. **i18n** — RU/EN/UZ переключение языка
+4. **SEO** — robots.txt, sitemap.xml, Open Graph превью для тем
+
+Если продолжаем — скажите, какой из этих экранов собрать следующим.

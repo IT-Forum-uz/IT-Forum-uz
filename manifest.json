@@ -1,0 +1,12 @@
+{
+  "name": "DevPort — форум для разработчиков",
+  "short_name": "DevPort",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0e14",
+  "theme_color": "#0b0e14",
+  "description": "Форум для разработчиков: frontend, backend, AI, DevOps, кибербезопасность.",
+  "icons": [
+    { "src": "assets/icons/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
